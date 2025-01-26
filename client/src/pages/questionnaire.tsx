@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 
@@ -18,7 +17,7 @@ const questions: Question[] = [
     id: 1,
     text: "How do you want to invest your money?",
     options: ["SIP", "One Time"],
-    conditionalNext: (answer) => answer === "SIP" ? 2 : 3,
+    conditionalNext: (answer) => (answer === "SIP" ? 2 : 3),
   },
   {
     id: 2,
@@ -74,30 +73,37 @@ export default function Questionnaire() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   const handleAnswer = (answer: string) => {
+    // Update answers
     setAnswers(prev => ({ ...prev, [currentQuestion.id]: answer }));
-    
+
+    // Handle conditional navigation
     if (currentQuestion.conditionalNext) {
-      const nextIndex = questions.findIndex(q => q.id === currentQuestion.conditionalNext!(answer)) - 1;
-      if (nextIndex >= 0) {
-        setCurrentQuestionIndex(nextIndex);
-        return;
+      const nextQuestionId = currentQuestion.conditionalNext(answer);
+      if (nextQuestionId) {
+        // Find the index of the next question
+        const nextIndex = questions.findIndex(q => q.id === nextQuestionId);
+        if (nextIndex >= 0) {
+          setCurrentQuestionIndex(nextIndex);
+          return;
+        }
       }
     }
-    
+
+    // Move to next question if available
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
       // Convert answers to financial details
       const riskLevel = answers[7]?.includes("high growth") ? "High" : 
                        answers[7]?.includes("moderate") ? "Moderate" : "Low";
-      
+
       setFinancialDetails({
         riskTolerance: riskLevel,
         investmentGoals: ["Growth", "Wealth Creation"],
-        monthlyInvestment: 5000, // Default value, can be calculated based on answers
+        monthlyInvestment: 5000,
         investmentHorizon: "5-10 years"
       });
-      
+
       setLocation('/dashboard');
     }
   };
@@ -117,8 +123,12 @@ export default function Questionnaire() {
                 {currentQuestion.options.map((option) => (
                   <Button
                     key={option}
-                    variant="outline"
-                    className="w-full justify-start text-left h-auto py-3 px-4"
+                    variant={answers[currentQuestion.id] === option ? "default" : "outline"}
+                    className={`w-full justify-start text-left h-auto py-3 px-4 transition-all duration-200 ${
+                      answers[currentQuestion.id] === option 
+                        ? "bg-primary text-primary-foreground"
+                        : "hover:bg-accent hover:text-accent-foreground"
+                    }`}
                     onClick={() => handleAnswer(option)}
                   >
                     {option}
