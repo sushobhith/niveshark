@@ -6,6 +6,7 @@ import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Dashboard from "@/pages/dashboard";
+import Questionnaire from "@/pages/questionnaire";
 
 // Protected route wrapper
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -26,7 +27,7 @@ function Router() {
         <ProtectedRoute component={Dashboard} />
       </Route>
       <Route path="/questionnaire">
-        <ProtectedRoute component={() => <div>Questionnaire (Coming Soon)</div>} />
+        <ProtectedRoute component={Questionnaire} />
       </Route>
       <Route component={NotFound} />
     </Switch>

@@ -1,0 +1,31 @@
+Questionnaire Questions
+
+    1. How do you want to invest your money?
+        Options: ['SIP', 'One Time']
+        If SIP → ask frequency before proceeding.
+    2. How much amount do you want to invest?
+        Minimum: 5000 rupees
+    3. How regular is your income?
+        Options: ['Regular monthly income', 'Irregular monthly income', 'No monthly income']
+    4. Do you own a house?
+        Options: ['Yes', 'No']
+        If Yes → ask if there’s a house loan and if it’s paid off or not.
+    5. What percentage of your annual income do you save?
+        Options: ['Less than 10%', 'Less than 20%', 'Less than 30%', 'Greater than or equal to 30%']
+    6. What percentage of your annual income goes into EMI?
+        Options: ['Less than 10%', 'Less than 20%', 'Less than 40%', 'Greater than 40%']
+    7. What is your investing experience in mutual funds and stocks?
+        Options: ['Never invested', 'Started less than 3 years back', 'Investing from last 10 years to 3 years', 'Investing for more than 10 years', 'I have stopped investing']
+    8. What percentage of your investment is in FD, PPF, NSC, etc.?
+        Options: ['Less than 20%', 'Between 20-30%', 'Between 40-50%', 'Greater than 60%']
+    9. How often do you check your portfolio’s current value/returns?
+        Options: ['Everyday', '4 to 5 times a month', 'Every month', '4 to 5 times a year']
+    10. In which scenario would you take corrective action?
+        Options: ['Portfolio is down 10%', 'Portfolio is down 20%', 'Portfolio is down 30%', 'Portfolio is down more than 40%', 'None of the above']
+    11. What portfolio strategy would you like to have?
+        Options:
+            'Preserve principal amount even if post-tax growth is below inflation'
+            'Preserve principal amount with post-tax growth at par with inflation'
+            'Achieve moderate growth (8%-9%) with a risk of temporary 15%-20% loss'
+            'Achieve high growth (10%-12%) with a risk of temporary 20%-30% loss'
+            'Maximize growth with a risk of temporary 30%-60% loss'
