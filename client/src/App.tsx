@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
+import Dashboard from "@/pages/dashboard";
 
 // Protected route wrapper
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
@@ -22,7 +23,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/dashboard">
-        <ProtectedRoute component={() => <div>Dashboard (Coming Soon)</div>} />
+        <ProtectedRoute component={Dashboard} />
       </Route>
       <Route path="/questionnaire">
         <ProtectedRoute component={() => <div>Questionnaire (Coming Soon)</div>} />
