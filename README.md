@@ -21,11 +21,6 @@ A modern web application that helps users manage their investments through AI-dr
   - @tanstack/react-query for API data management
   - React Context for global state management
 
-- **Backend**:
-  - Express.js server
-  - PostgreSQL database with Drizzle ORM
-  - Authentication using Passport.js
-
 ## Getting Started
 
 1. Clone the repository
@@ -33,11 +28,7 @@ A modern web application that helps users manage their investments through AI-dr
    ```bash
    npm install
    ```
-3. Set up environment variables:
-   - DATABASE_URL - PostgreSQL connection string
-   - (Add other required environment variables)
-
-4. Start the development server:
+3. Start the development server:
    ```bash
    npm run dev
    ```
@@ -48,14 +39,16 @@ A modern web application that helps users manage their investments through AI-dr
 ├── client/                 # Frontend code
 │   ├── src/
 │   │   ├── components/    # Reusable UI components
+│   │   │   ├── auth/     # Authentication related components
+│   │   │   ├── dashboard/ # Dashboard specific components
+│   │   │   ├── layout/   # Layout components (navbar, etc.)
+│   │   │   └── ui/       # Base UI components from shadcn
 │   │   ├── hooks/        # Custom React hooks
 │   │   ├── lib/          # Utility functions
 │   │   ├── pages/        # Page components
 │   │   └── App.tsx       # Main application component
-├── db/                    # Database configuration and schemas
-├── server/                # Backend code
-│   ├── routes.ts         # API routes
-│   └── index.ts          # Server entry point
+│   └── index.html        # HTML entry point
+├── docs/                  # Documentation
 └── theme.json            # Global theme configuration
 ```
 
@@ -69,5 +62,5 @@ For more detailed documentation, see:
 See our [Development Guidelines](./docs/DEVELOPMENT.md) for detailed instructions on:
 - Code style and conventions
 - Adding new features
-- Working with the codebase
+- State management patterns
 - Best practices

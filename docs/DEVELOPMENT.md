@@ -5,12 +5,10 @@
 ### Prerequisites
 1. Node.js (v18 or higher)
 2. npm (comes with Node.js)
-3. PostgreSQL database
-4. Basic understanding of:
+3. Basic understanding of:
    - React
    - TypeScript
    - Tailwind CSS
-   - Express.js
 
 ### Development Workflow
 
@@ -77,31 +75,54 @@ export function MyComponent({ title, onAction }: MyComponentProps) {
 - Use React Query for API data
 - Keep component state local when possible
 
-#### 2. Backend Development
+Example of managing form state:
+```tsx
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
-##### API Routes
-- Add routes in `server/routes.ts`
-- Follow RESTful conventions
-- Include proper error handling
-- Example:
-```typescript
-app.get('/api/resource', async (req, res) => {
-  try {
-    // Your logic here
-    res.json({ data: result });
-  } catch (error) {
-    res.status(500).json({ 
-      error: 'Something went wrong',
-      details: error.message 
-    });
-  }
+// Define form schema
+const schema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email')
 });
-```
 
-##### Database
-- Define schemas in `db/schema.ts`
-- Use Drizzle ORM for database operations
-- Include proper validation
+function UserForm() {
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      name: '',
+      email: ''
+    }
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      // Make API call
+      const response = await fetch('/api/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit');
+      }
+
+      // Handle success
+    } catch (error) {
+      // Handle error
+    }
+  };
+
+  return (
+    <form onSubmit={form.handleSubmit(onSubmit)}>
+      {/* Form fields */}
+    </form>
+  );
+}
+```
 
 ### Best Practices
 
@@ -110,6 +131,7 @@ app.get('/api/resource', async (req, res) => {
    - Write small, focused functions
    - Comment complex logic
    - Use TypeScript types
+   - Use async/await for promises
 
 2. **Performance**
    - Minimize unnecessary rerenders
@@ -117,79 +139,109 @@ app.get('/api/resource', async (req, res) => {
    - Implement proper loading states
    - Handle errors gracefully
 
-3. **Security**
-   - Validate all user input
-   - Use proper authentication
-   - Sanitize data before storing
-   - Handle sensitive data carefully
+3. **State Management Patterns**
+   ```typescript
+   // Bad - Nested state updates
+   setState(prev => ({
+     ...prev,
+     data: {
+       ...prev.data,
+       nested: newValue
+     }
+   }));
 
-4. **Testing**
-   - Test component rendering
-   - Test user interactions
-   - Test API endpoints
-   - Test error cases
+   // Good - Use reducer for complex state
+   type Action = 
+     | { type: 'UPDATE_NESTED'; value: string }
+     | { type: 'RESET' };
+
+   function reducer(state, action: Action) {
+     switch (action.type) {
+       case 'UPDATE_NESTED':
+         return {
+           ...state,
+           data: {
+             ...state.data,
+             nested: action.value
+           }
+         };
+       case 'RESET':
+         return initialState;
+       default:
+         return state;
+     }
+   }
+   ```
 
 ### Common Tasks
 
-1. **Adding a New Page**
-```typescript
-// 1. Create page component
-// client/src/pages/new-page.tsx
-export default function NewPage() {
-  return (
-    <div>
-      <h1>New Page</h1>
-    </div>
-  );
-}
+1. **Adding a New Feature**
+   ```typescript
+   // 1. Define types
+   interface Feature {
+     id: string;
+     name: string;
+     enabled: boolean;
+   }
 
-// 2. Add route
-// client/src/App.tsx
-<Route path="/new-page">
-  <ProtectedRoute component={NewPage} />
-</Route>
-```
+   // 2. Create hook for data fetching
+   function useFeature(id: string) {
+     return useQuery(['feature', id], async () => {
+       const response = await fetch(`/api/features/${id}`);
+       return response.json();
+     });
+   }
 
-2. **Adding an API Endpoint**
-```typescript
-// server/routes.ts
-app.post('/api/resource', async (req, res) => {
-  try {
-    const data = req.body;
-    // Process data
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-```
+   // 3. Create component
+   function FeatureComponent({ id }: { id: string }) {
+     const { data, isLoading } = useFeature(id);
 
-3. **Creating a New Component**
-```typescript
-// client/src/components/ui/my-component.tsx
-interface Props {
-  title: string;
-}
+     if (isLoading) {
+       return <div>Loading...</div>;
+     }
 
-export function MyComponent({ title }: Props) {
-  return (
-    <div className="p-4 bg-background">
-      <h2>{title}</h2>
-    </div>
-  );
-}
-```
+     return (
+       <div>
+         <h2>{data.name}</h2>
+         {/* Component content */}
+       </div>
+     );
+   }
+   ```
+
+2. **Form Handling**
+   ```typescript
+   import { useForm } from 'react-hook-form';
+   import { zodResolver } from '@hookform/resolvers/zod';
+   import * as z from 'zod';
+
+   const schema = z.object({
+     // Define form fields
+   });
+
+   function MyForm() {
+     const form = useForm({
+       resolver: zodResolver(schema)
+     });
+
+     return (
+       <form onSubmit={form.handleSubmit(onSubmit)}>
+         {/* Form fields */}
+       </form>
+     );
+   }
+   ```
 
 ### Troubleshooting
 
 1. **Common Issues**
    - Check console for errors
-   - Verify API endpoints
-   - Check authentication state
-   - Verify database connection
+   - Verify state updates
+   - Check component props
+   - Verify event handlers
 
 2. **Development Tools**
    - Use React DevTools
    - Use Network tab for API issues
    - Use console.log for debugging
-   - Check application state
+   - Check application state in React DevTools

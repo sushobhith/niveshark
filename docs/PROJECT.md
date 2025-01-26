@@ -8,7 +8,7 @@ This application helps users manage their investments by providing AI-driven rec
 ### 1. User Authentication
 - Sign up and sign in functionality
 - Protected routes for authenticated users
-- Session management
+- Global auth state management using React Context
 - Location: `client/src/components/auth/auth-dialog.tsx`
 
 ### 2. Financial Profiling
@@ -54,29 +54,97 @@ export default function Reports() {
 </Link>
 ```
 
-### 2. New API Endpoints
-To add new API endpoints:
-1. Add routes in `server/routes.ts`
-2. Create corresponding frontend API calls
-3. Use React Query for data fetching
+### 2. Making API Calls
+Use React Query for data fetching and mutations:
 
-Example:
 ```typescript
-// server/routes.ts
-app.get('/api/reports', (req, res) => {
-  // Add your API logic
-});
-
-// client/src/hooks/use-reports.ts
-export function useReports() {
-  return useQuery(['reports'], async () => {
-    const response = await fetch('/api/reports');
+// Example of fetching data
+function useUserData() {
+  return useQuery(['userData'], async () => {
+    const response = await fetch('/api/user-data');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
     return response.json();
   });
 }
+
+// Example of mutation (updating data)
+function useUpdateUser() {
+  return useMutation(
+    async (userData) => {
+      const response = await fetch('/api/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update user');
+      }
+      return response.json();
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch user data
+        queryClient.invalidateQueries(['userData']);
+      }
+    }
+  );
+}
 ```
 
-### 3. UI Components
+### 3. State Management
+
+#### Local State
+Use `useState` for component-level state:
+```tsx
+function MyComponent() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '' });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {/* Form fields */}
+    </form>
+  );
+}
+```
+
+#### Global State
+Use React Context for app-wide state:
+```tsx
+// Create context
+const AppContext = createContext<AppState | null>(null);
+
+// Provider component
+export function AppProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<AppState>({
+    // Initial state
+  });
+
+  return (
+    <AppContext.Provider value={{ state, setState }}>
+      {children}
+    </AppContext.Provider>
+  );
+}
+
+// Custom hook to use the context
+export function useAppState() {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useAppState must be used within AppProvider');
+  }
+  return context;
+}
+```
+
+### 4. UI Components
 To add new UI components:
 1. Create component in `client/src/components/`
 2. Use shadcn/ui components as building blocks
@@ -102,8 +170,8 @@ export function ReportCard({ title, data }) {
 ```
 
 ## Next Steps
-1. Implement real API integration
-2. Add more sophisticated investment analysis
-3. Enhance user experience with animations
-4. Add notification system
-5. Implement real-time updates
+1. Add more interactive features
+2. Enhance data visualization
+3. Add user preferences
+4. Implement custom themes
+5. Add mobile responsiveness

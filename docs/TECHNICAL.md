@@ -28,26 +28,9 @@ client/src/
 - Protected routes using `ProtectedRoute` component
 - Route definitions in `App.tsx`
 
-### Backend Architecture
-
-#### 1. Server Structure
-```
-server/
-├── routes.ts           # API route definitions
-├── auth.ts            # Authentication logic
-└── index.ts           # Server entry point
-```
-
-#### 2. Database Schema
-```
-db/
-├── schema.ts          # Database schema definitions
-└── index.ts          # Database connection setup
-```
-
 ## Key Technologies
 
-### 1. Frontend
+### 1. Frontend Tools
 - **React**: UI library
 - **TypeScript**: Type safety
 - **Vite**: Build tool
@@ -56,40 +39,32 @@ db/
 - **React Query**: API data management
 - **Wouter**: Routing
 
-### 2. Backend
-- **Express.js**: Web server
-- **Passport.js**: Authentication
-- **PostgreSQL**: Database
-- **Drizzle ORM**: Database ORM
 
 ## Authentication Flow
 
-1. **User Registration**
-   ```typescript
-   // hooks/use-auth.tsx
-   const signUp = async (username: string, password: string) => {
-     // Register user
-     setUser({ id: '1', username, isNewUser: true });
-     setFinancialDetails(null);
-     setLocation('/dashboard');
-   };
-   ```
+```typescript
+// hooks/use-auth.tsx
+const signUp = async (username: string, password: string) => {
+  try {
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
 
-2. **User Login**
-   ```typescript
-   // hooks/use-auth.tsx
-   const signIn = async (username: string, password: string) => {
-     // Authenticate user
-     setUser({ id: '1', username, isNewUser: false });
-     setFinancialDetails({
-       riskTolerance: "Moderate",
-       investmentGoals: ["Retirement"],
-       monthlyInvestment: 1000,
-       investmentHorizon: "5-10 years"
-     });
-     setLocation('/dashboard');
-   };
-   ```
+    if (!response.ok) {
+      throw new Error('Registration failed');
+    }
+
+    const data = await response.json();
+    setUser(data.user);
+    setLocation('/dashboard');
+  } catch (error) {
+    console.error('Sign up failed:', error);
+    throw error;
+  }
+};
+```
 
 ## Data Flow
 
@@ -99,7 +74,28 @@ db/
 const { data, isLoading } = useQuery(['userData'], 
   async () => {
     const response = await fetch('/api/user-data');
+    if (!response.ok) {
+      throw new Error('Failed to fetch user data');
+    }
     return response.json();
+  }
+);
+
+// Example mutation
+const mutation = useMutation(
+  async (newData) => {
+    const response = await fetch('/api/user-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newData)
+    });
+    return response.json();
+  },
+  {
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(['userData']);
+    }
   }
 );
 ```
@@ -134,89 +130,106 @@ interface PortfolioData {
 }
 
 export default function PortfolioSummary() {
-  // Component implementation
+  const { data, isLoading } = useQuery(['portfolio'], fetchPortfolioData);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Portfolio Summary</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {/* Render portfolio data */}
+      </CardContent>
+    </Card>
+  );
 }
 ```
-
-## Database Schema
-
-```typescript
-// db/schema.ts
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").unique().notNull(),
-  password: text("password").notNull(),
-});
-
-// Add more tables as needed
-```
-
-## API Endpoints
-
-### Current Endpoints
-```typescript
-// Authentication
-POST /api/register     // User registration
-POST /api/login       // User login
-POST /api/logout      // User logout
-GET  /api/user        // Get current user
-
-// (Add more endpoints as implemented)
-```
-
-## Security Considerations
-
-1. **Authentication**
-   - Session-based authentication
-   - Protected routes
-   - Password hashing
-
-2. **Data Safety**
-   - Input validation
-   - SQL injection prevention via ORM
-   - XSS protection
 
 ## Performance Optimization
 
 1. **Frontend**
-   - Code splitting
-   - Lazy loading
-   - Memoization
+   ```typescript
+   // Memoize expensive components
+   const ExpensiveComponent = React.memo(function ExpensiveComponent({ data }) {
+     // Component logic
+   });
 
-2. **Backend**
-   - Query optimization
-   - Caching
-   - Rate limiting
+   // Use callback for event handlers
+   const handleClick = useCallback(() => {
+     // Handle click
+   }, [/* dependencies */]);
+
+   // Memoize computed values
+   const computedValue = useMemo(() => {
+     // Expensive computation
+   }, [/* dependencies */]);
+   ```
 
 ## Error Handling
 
-1. **Frontend Errors**
+1. **API Error Handling**
 ```typescript
-try {
-  // Operation
-} catch (error) {
-  console.error('Operation failed:', error);
-  // Show user-friendly error message
+async function fetchData() {
+  try {
+    const response = await fetch('/api/data');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    // Show error message to user
+    toast({
+      title: 'Error',
+      description: 'Failed to fetch data. Please try again.',
+      variant: 'destructive'
+    });
+  }
 }
 ```
 
-2. **Backend Errors**
+2. **Form Validation**
 ```typescript
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+const schema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters')
 });
+
+function LoginForm() {
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  });
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {/* Form fields */}
+      </form>
+    </Form>
+  );
+}
 ```
 
 ## Future Improvements
 
-1. **Technical Debt**
-   - Implement proper API error handling
-   - Add comprehensive testing
-   - Set up CI/CD pipeline
+1. **Features**
+   - Add real-time updates using WebSocket
+   - Implement infinite scrolling for large data sets
+   - Add client-side caching
+   - Implement better error boundaries
+   - Add accessibility improvements
 
-2. **Features**
-   - Real-time updates
-   - Advanced analytics
-   - Mobile responsiveness
-   - PDF report generation
+2. **Performance**
+   - Implement code splitting
+   - Add service worker for offline support
+   - Optimize bundle size
+   - Add performance monitoring
