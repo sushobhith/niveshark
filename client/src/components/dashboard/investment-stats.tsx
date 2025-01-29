@@ -13,9 +13,9 @@ export default function InvestmentStats() {
   ];
 
   return (
-    <Card>
+    <Card className="glass-card">
       <CardHeader>
-        <CardTitle>Performance History</CardTitle>
+        <CardTitle className="text-lg font-medium text-foreground">Performance History</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
@@ -23,8 +23,8 @@ export default function InvestmentStats() {
             <AreaChart data={data}>
               <defs>
                 <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(215, 70%, 25%)" stopOpacity={0.8}/>
-                  <stop offset="95%" stopColor="hsl(215, 70%, 25%)" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="hsl(51, 100%, 50%)" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="hsl(51, 100%, 50%)" stopOpacity={0}/>
                 </linearGradient>
               </defs>
               <XAxis 
@@ -42,12 +42,18 @@ export default function InvestmentStats() {
                 tickFormatter={(value) => `$${value.toLocaleString()}`}
               />
               <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'rgba(13, 13, 13, 0.8)',
+                  border: '1px solid rgba(255, 215, 0, 0.2)',
+                  borderRadius: '8px'
+                }}
                 formatter={(value: number) => [`$${value.toLocaleString()}`, "Portfolio Value"]}
               />
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke="hsl(215, 70%, 25%)"
+                stroke="hsl(51, 100%, 50%)"
+                strokeWidth={2}
                 fillOpacity={1}
                 fill="url(#colorValue)"
               />
