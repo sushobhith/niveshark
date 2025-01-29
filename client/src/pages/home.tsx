@@ -5,7 +5,7 @@ import { useState } from "react";
 import { AuthDialog } from "@/components/auth/auth-dialog";
 
 const SharkLogo = () => (
-  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M32 8C18 8 8 24 8 32C8 40 18 56 32 56C46 56 56 40 56 32C56 24 46 8 32 8Z" stroke="currentColor" strokeWidth="2"/>
     <path d="M20 28L32 40L44 28" stroke="currentColor" strokeWidth="2"/>
     <path d="M32 24V48" stroke="currentColor" strokeWidth="2"/>
@@ -26,23 +26,26 @@ export default function Home() {
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="section-padding bg-gradient-to-b from-background to-muted/20">
-        <div className="content-width text-center">
-          <div className="flex justify-center items-center mb-6">
-            <SharkLogo />
+        <div className="content-width">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
+            {/* Logo and Title Container */}
+            <div className="flex items-center gap-4 mb-6 animate-in fade-in slide-in-from-bottom duration-500">
+              <SharkLogo />
+              <h1 className="heading-1 text-foreground">Niveshark</h1>
+            </div>
+
+            <p className="body-text mb-8 animate-in fade-in slide-in-from-bottom duration-500 delay-150">
+              Your AI-Powered personal investment manager
+            </p>
+
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 btn-hover animate-in fade-in slide-in-from-bottom duration-500 delay-300"
+              onClick={() => handleAuthClick('signin')}
+            >
+              Sign In
+            </Button>
           </div>
-          <h1 className="heading-1 text-foreground mb-6 animate-in fade-in slide-in-from-bottom duration-500">
-            Niveshark
-          </h1>
-          <p className="body-text mb-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom duration-500 delay-150">
-            Your AI-Powered personal investment manager
-          </p>
-          <Button 
-            size="lg" 
-            className="bg-primary hover:bg-primary/90 btn-hover animate-in fade-in slide-in-from-bottom duration-500 delay-300"
-            onClick={() => handleAuthClick('signin')}
-          >
-            Sign In
-          </Button>
         </div>
       </section>
 
