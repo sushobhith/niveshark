@@ -15,14 +15,6 @@
   button, a, input, select {
     @apply transition-all duration-200;
   }
-
-  /* Dark mode enhancements */
-  .dark {
-    --background: 220 10% 10%;
-    --card-background: 220 10% 12%;
-    --popover-background: 220 10% 8%;
-    --border: 220 10% 20%;
-  }
 }
 
 @layer components {
@@ -37,17 +29,17 @@
 
   /* Enhanced button hover effects */
   .btn-hover {
-    @apply hover:scale-105 active:scale-95 hover:shadow-lg dark:hover:shadow-primary/20;
+    @apply hover:scale-105 active:scale-95;
   }
 
   /* Card hover effects */
   .card-hover {
-    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl dark:hover:shadow-primary/10;
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl;
   }
 
   /* Responsive text sizes */
   .heading-1 {
-    @apply text-3xl sm:text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80;
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold;
   }
 
   .heading-2 {
@@ -56,15 +48,6 @@
 
   .body-text {
     @apply text-base sm:text-lg text-muted-foreground;
-  }
-
-  /* Dark mode specific styles */
-  .dark-gradient {
-    @apply bg-gradient-to-b from-background via-background/95 to-muted/30;
-  }
-
-  .dark-card {
-    @apply dark:bg-card-background/50 dark:backdrop-blur-sm;
   }
 }
 
