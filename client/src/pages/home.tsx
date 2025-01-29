@@ -25,7 +25,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="section-padding bg-gradient-to-b from-background to-muted/20">
+      <section className="section-padding hero-gradient">
         <div className="content-width">
           <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
             {/* Logo and Title Container */}
@@ -52,8 +52,8 @@ export default function Home() {
       {/* Features */}
       <section className="section-padding bg-muted/30">
         <div className="content-width grid gap-8 md:grid-cols-3">
-          <Card className="transform transition-all duration-300 hover:scale-105">
-            <CardContent className="pt-6">
+          <Card className="feature-card">
+            <CardContent className="p-0">
               <Bot className="h-8 w-8 text-primary mb-4" />
               <h3 className="font-semibold mb-2">AI-Driven Strategy</h3>
               <p className="text-sm text-muted-foreground">
@@ -62,8 +62,8 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <Card className="transform transition-all duration-300 hover:scale-105">
-            <CardContent className="pt-6">
+          <Card className="feature-card">
+            <CardContent className="p-0">
               <Shield className="h-8 w-8 text-primary mb-4" />
               <h3 className="font-semibold mb-2">Risk Management</h3>
               <p className="text-sm text-muted-foreground">
@@ -72,8 +72,8 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <Card className="transform transition-all duration-300 hover:scale-105">
-            <CardContent className="pt-6">
+          <Card className="feature-card">
+            <CardContent className="p-0">
               <TrendingUp className="h-8 w-8 text-primary mb-4" />
               <h3 className="font-semibold mb-2">Performance Tracking</h3>
               <p className="text-sm text-muted-foreground">
