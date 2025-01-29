@@ -16,11 +16,7 @@ function ProtectedRoute({ component: Component }: { component: React.ComponentTy
     return <Redirect to="/" />;
   }
 
-  return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Component />
-    </div>
-  );
+  return <Component />;
 }
 
 function Router() {
@@ -42,10 +38,8 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <div className="min-h-screen bg-background text-foreground">
-          <Router />
-          <Toaster />
-        </div>
+        <Router />
+        <Toaster />
       </AuthProvider>
     </QueryClientProvider>
   );

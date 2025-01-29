@@ -1,55 +1,82 @@
-import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { AuthDialog } from "@/components/auth/auth-dialog";
+import { ArrowRight, Bot, Shield, TrendingUp } from "lucide-react";
+import Navbar from "@/components/layout/navbar";
+import PortfolioSummary from "@/components/dashboard/portfolio-summary";
+import InvestmentStats from "@/components/dashboard/investment-stats";
 
 export default function Home() {
-  const [showAuthDialog, setShowAuthDialog] = useState(false);
-  const [authType, setAuthType] = useState<'signin' | 'signup'>('signin');
-
-  const handleAuthClick = (type: 'signin' | 'signup') => {
-    setAuthType(type);
-    setShowAuthDialog(true);
-  };
-
   return (
-    <div className="min-h-screen bg-background flex items-center">
-      <div className="w-full max-w-7xl mx-auto px-6 py-12 md:py-24">
-        <div className="flex flex-col md:flex-row items-center justify-between">
-          {/* Branding and Message */}
-          <div className="flex-1 max-w-2xl mb-12 md:mb-0">
-            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary to-primary/80 mb-6 font-poppins">
-              Niveshark
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground font-manrope">
-              Your personal AI-powered investment manager
-            </p>
-          </div>
+    <div className="min-h-screen bg-background">
+      <Navbar />
 
-          {/* Authentication Buttons */}
-          <div className="flex gap-4">
-            <Button
-              variant="ghost"
-              onClick={() => handleAuthClick('signin')}
-              className="hover:bg-white/5 text-lg px-8"
-            >
-              Sign In
-            </Button>
-            <Button
-              className="bg-primary hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300 text-lg px-8"
-              onClick={() => handleAuthClick('signup')}
-            >
-              Sign Up
-            </Button>
+      {/* Hero Section */}
+      <section className="section-padding bg-gradient-to-b from-background to-muted/20">
+        <div className="content-width text-center">
+          <h1 className="heading-1 text-foreground mb-6 animate-in fade-in slide-in-from-bottom duration-500">
+            AI-Powered Investment Management
+          </h1>
+          <p className="body-text mb-8 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom duration-500 delay-150">
+            Let our advanced AI algorithms optimize your investment portfolio for maximum returns while managing risk.
+          </p>
+          <Button 
+            size="lg" 
+            className="bg-primary hover:bg-primary/90 btn-hover animate-in fade-in slide-in-from-bottom duration-500 delay-300"
+          >
+            Get Started <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="section-padding bg-muted/30">
+        <div className="content-width grid gap-8 md:grid-cols-3">
+          <Card className="transform transition-all duration-300 hover:scale-105">
+            <CardHeader>
+              <Bot className="h-8 w-8 text-primary mb-4" />
+              <CardTitle>AI-Driven Strategy</CardTitle>
+            </CardHeader>
+            <CardContent className="body-text">
+              Advanced algorithms analyze market trends and optimize your portfolio in real-time.
+            </CardContent>
+          </Card>
+
+          <Card className="transform transition-all duration-300 hover:scale-105">
+            <CardHeader>
+              <Shield className="h-8 w-8 text-primary mb-4" />
+              <CardTitle>Risk Management</CardTitle>
+            </CardHeader>
+            <CardContent className="body-text">
+              Sophisticated risk assessment and mitigation strategies to protect your investments.
+            </CardContent>
+          </Card>
+
+          <Card className="transform transition-all duration-300 hover:scale-105">
+            <CardHeader>
+              <TrendingUp className="h-8 w-8 text-primary mb-4" />
+              <CardTitle>Performance Tracking</CardTitle>
+            </CardHeader>
+            <CardContent className="body-text">
+              Real-time monitoring and detailed analytics of your investment performance.
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Dashboard Preview */}
+      <section className="section-padding">
+        <div className="content-width">
+          <h2 className="heading-2 text-center mb-12">Your Investment Dashboard</h2>
+          <div className="grid gap-8 md:grid-cols-2">
+            <div className="transform transition-all duration-300 hover:translate-y-[-4px]">
+              <PortfolioSummary />
+            </div>
+            <div className="transform transition-all duration-300 hover:translate-y-[-4px]">
+              <InvestmentStats />
+            </div>
           </div>
         </div>
-      </div>
-
-      <AuthDialog
-        isOpen={showAuthDialog}
-        onClose={() => setShowAuthDialog(false)}
-        defaultTab={authType}
-      />
+      </section>
     </div>
   );
 }

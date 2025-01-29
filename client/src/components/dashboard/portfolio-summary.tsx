@@ -5,20 +5,20 @@ export default function PortfolioSummary() {
   const portfolioData = {
     total: 150000,
     allocation: [
-      { name: "Stocks", percentage: 60, color: "bg-primary" },
-      { name: "Bonds", percentage: 25, color: "bg-primary/60" },
-      { name: "Cash", percentage: 15, color: "bg-primary/30" }
+      { name: "Stocks", percentage: 60, color: "bg-blue-600" },
+      { name: "Bonds", percentage: 25, color: "bg-green-600" },
+      { name: "Cash", percentage: 15, color: "bg-amber-600" }
     ]
   };
 
   return (
-    <Card className="glass-card">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-lg font-medium text-foreground">Portfolio Summary</CardTitle>
+        <CardTitle>Portfolio Summary</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="mb-6">
-          <p className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+          <p className="text-3xl font-bold">
             ${portfolioData.total.toLocaleString()}
           </p>
           <p className="text-sm text-muted-foreground">Total Portfolio Value</p>
@@ -26,9 +26,9 @@ export default function PortfolioSummary() {
 
         <div className="space-y-4">
           {portfolioData.allocation.map((asset) => (
-            <div key={asset.name} className="space-y-2">
+            <div key={asset.name}>
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-foreground">{asset.name}</span>
+                <span className="text-sm font-medium">{asset.name}</span>
                 <span className="text-sm text-muted-foreground">
                   {asset.percentage}%
                 </span>
