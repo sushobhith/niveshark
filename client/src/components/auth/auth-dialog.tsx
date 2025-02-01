@@ -14,6 +14,7 @@ export function AuthDialog({ isOpen, onClose, defaultTab = 'signin' }: AuthDialo
   const [activeTab, setActiveTab] = useState<'signin' | 'signup'>(defaultTab);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const { signIn, signUp } = useAuth();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -21,7 +22,7 @@ export function AuthDialog({ isOpen, onClose, defaultTab = 'signin' }: AuthDialo
     if (activeTab === 'signin') {
       signIn(username, password);
     } else {
-      signUp(username, password);
+      signUp(username, password, email);
     }
     onClose();
   };
@@ -61,6 +62,13 @@ export function AuthDialog({ isOpen, onClose, defaultTab = 'signin' }: AuthDialo
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            {activeTab === 'signup' && 
+            <Input
+              type="email"
+              placeholder="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />}
           </div>
           <Button type="submit" className="w-full">
             {activeTab === 'signin' ? 'Sign In' : 'Sign Up'}

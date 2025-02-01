@@ -7,7 +7,7 @@ import PortfolioSummary from "@/components/dashboard/portfolio-summary";
 import InvestmentStats from "@/components/dashboard/investment-stats";
 
 export default function Dashboard() {
-  const { user, financialDetails } = useAuth();
+  const { user, financialDetails, signOut } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
@@ -23,14 +23,15 @@ export default function Dashboard() {
                 {financialDetails ? 'Here\'s your investment overview' : 'Let\'s start your investment journey'}
               </p>
             </div>
-            {!financialDetails && (
+            {/* {!financialDetails && (
               <Link href="/questionnaire">
                 <Button className="bg-primary hover:bg-primary/90">
                   <ClipboardList className="mr-2 h-4 w-4" />
                   Complete Financial Profile
                 </Button>
               </Link>
-            )}
+            )} */}
+            <Button onClick={signOut} variant="outline">Sign Out</Button>
           </div>
         </div>
       </div>
